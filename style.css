@@ -1,0 +1,348 @@
+/* 각각의 브라우저는 고유한 렌더링 방식을 가지고 있기 때문에,
+CSS Reset을 사용하거나 normalize를 적용하더라도 필연적으로 다르게 보이는 부분이 발생하게 됩니다. 
+이를 이해한 상태에서, 사용자가 불편함을 느끼지 않는 선에서 
+디자인의 통일성을 줄 수 있는 방향을 고민해보는 것이 옳을 것입니다. */
+/* 공통 속성 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* 전체 박스 사이즈를 보더 박스 기준으로 바꾸고 + 가상요소의 사이즈도 보더 박스 기준으로 초기화 */
+}
+html {
+  font-size: 10px;
+  /* 글자크기는 상대크기로 넣을 예정이므로 HTML글자 크기를 기준값으로 설정함 */
+}
+body {
+  min-width: 1060px; /* 윈도우 창을 줄여도 이 이하 줄어들지 않음 */
+  font-size: 1.8rem; /* 글자 크기 : 10px * 1.8 = 18 */
+  /* rem vs em em은 상대적인 글자크기가 내부 태그에 중첩적으로 적용되어 제곱이 되므로 
+  내부 태그가 있을 경우 부모 태그보다 글자가 커짐 */
+  line-height: 1.6;
+  /* 줄 간격을 1.6(기본값)으로 고정*/
+  font-family: roboto, avenir, sans-serif;
+  /* 먼저 font-family의 값(글꼴)을 주겠습니다. 
+  font-family는 Roboto, Avenir 글꼴 두 개와 sans-serif 제네릭 폰트가 적용되어 있습니다. 
+  Roboto는 로컬 컴퓨터에 저장되어 있지 않은 경우가 많기 때문에, 웹 폰트라는 것을 사용해 보겠습니다.
+  웹 폰트란, 웹에서 언제나 글꼴을 얻을 수 있도록 하는 기능입니다. 
+  사용하고자 하는 폰트를 업로드 한 후 서버로부터 해당 내용을 받을 수도 있고요, 
+  오픈소스 타이포그라피를 사용하는 경우도 있습니다. 
+  우리는 Google Fonts에서 오픈소스로 올라와 있는 Roboto font를 이용해 보겠습니다.
+  먼저 roboto를 검색하고 선택합니다. customize에 들어가서 우리가 사용할 폰트를 골라줍니다. 
+  italic과 100을 제외하고 모두 선택합니다. 
+  그리고 난 뒤에 link 요소에 URL과 함께 적혀 있는 코드를 복사하여 head 영역 안에 붙여넣기 해줍니다. 
+  이제부터 우리 사이트는 이용자의 컴퓨터에 Roboto 폰트가 없더라도 웹에서 다운 받아 
+  사용할 수 있도록 지원하게 되었습니다. */
+}
+/* a 태그(링크)에 줄 그어지는 것 제거 */
+a {
+  text-decoration: none;
+}
+
+/* 작업 전 구분을 위해 영역(색깔) 표시 추후 삭제 */
+/* header */
+.header {
+  background: red;
+  height: 72px;
+  padding: 15px 0 4px;
+  /* header에 padding 값을 줘서 container가 15px만큼 내려가도록 지정*/
+}
+.container,
+.container-float {
+  max-width: 1400px; /* 윈도우 창을 늘려도 이 이상 늘어나지 않음 */
+  margin: 0 auto; /* alignment 조정 */
+  padding: 0 20px; /* 윈도우 창을 줄여도 어느정도 여백을 주기 때문에 가독성 향상
+  padding값을 안주면 글자가 모니터 모서리에 붙어서 출력 됨 */
+  position: relative; /* logo 와 nav 위치를 container 크기를 기준으로 상대적인 위치에 오도록 
+  하기 위해 기준을 설정함 */
+}
+/* 플로트로 인해 container의 속성을 상속받지 못하므로 별도로 지정 */
+/* .container-float {
+  max-width: 1400px; # 윈도우 창을 늘려도 이 이상 늘어나지 않음
+  margin: 0 auto; # alignment 조정
+  background: black;
+  padding: 0 20px; # 윈도우 창을 줄여도 어느정도 여백을 주기 때문에 가독성 향상
+    # padding값을 안주면 글자가 모니터 모서리에 붙어서 출력 됨
+  position: relative; # logo 와 nav 위치를 container 크기를 기준으로 상대적인 위치에 오도록 
+    하기 위해 기준을 설정함
+  background: #c8ff00;
+} */
+/* .container-float::after를 사용해 float 속성을 가진 영역의 크기를 부모가 인지하도록 해줌 */
+.container-float::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+.logo {
+  /* container의 왼쪽 상단에 위치하도록 절대값으로 지정 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0; /* hearder의 margin 값이 상속되어 글자 위치가 약간 내려가서 표현되는 것 수정*/
+  padding-left: inherit;
+  /* container의 padding값 상속 */
+}
+.nav {
+  text-align: right;
+  /* nav 위치가 container 기준 가장 오른쪽에 위치하도록 함 */
+}
+.list {
+  margin: 0; /* hearder의 margin 값이 상속되어 글자 위치가 약간 내려가서 표현되는 것 수정 */
+  font-size: 0;
+  /* list-item간 간격 없애기 위해 부모인 list의 글자크기를 없앰 */
+}
+.list-item {
+  display: inline-block;
+  /* nav 의 list들이 일렬로 표현되도록 설정 */
+  font-weight: 700;
+  /* list-item 글자 굵기 늘림*/
+  font-size: 1.3rem;
+  /* list-item간 간격 없애기 위해 부모인 list의 글자크기를 없애고 별도의 글씨 크기를 지정 */
+  text-transform: uppercase;
+  /* 글자 대문자로 모두 변환 */
+}
+/* ".list-item > a" 는 바로 아래있는 a 속성만 지정 아래의 경우 .list-item아래의 모든 a속성 지정 */
+.list-item a {
+  color: white;
+  display: block;
+  padding: 10px;
+  /* 글씨만 있으면 링크를 선택하기 힘들기 때문에 padding을 주고 block으로 설정해 버튼을 만들어 줌 */
+}
+.list-item a:hover {
+  color: #c9f0dd;
+}
+/* 글씨를 선택했을 때 색상이 바뀌도록 하기 위해 가상요소(:hover_마우스를 위에 올린 상태)를 사용 */
+
+/* ---------------------------------------------------------------------------------------- */
+
+/* main */
+.hero-section {
+  text-align: center;
+  padding: 50px 0;
+  border-bottom: 1px solid #cfe3dc;
+}
+.intro-desc {
+  width: 700px;
+  font-weight: 300;
+  font-size: 3.6rem;
+  margin: 40px auto 50px;
+  line-height: 1.3;
+}
+.hero-cta {
+  width: 300px;
+  padding: 20px 50px;
+  margin: 0 auto 60px;
+}
+.cta {
+  display: block;
+  border-radius: 8px;
+  background: #44b78b;
+  color: white;
+  font-weight: 400;
+}
+.cta:hover {
+  background: #51be95;
+}
+.main-content {
+  float: left; /* 왼쪽에 어울림으로 위치
+  float 속성을 쓰면 부모 속성이 자식 속성의 크기를 알지 못함 */
+  width: 70%; /* 왼쪽에 어울림으로 위치할 때 차지하는 비율 */
+  padding: 0 20px 0 0;
+}
+.main-content a:hover {
+  color: #25c488;
+}
+.main-title {
+  font-weight: 400;
+  margin: 40px 0 20px 0;
+  font-size: 3.2rem;
+  /* 글자 간격 줄이는 명령어 */
+  letter-spacing: -1px;
+}
+.main-desc {
+  margin: 0 0 20px 0;
+}
+.mailing-layout {
+  padding-top: 20px;
+}
+.mailing-layout::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.mailing {
+  float: left;
+  width: 48%;
+}
+/* mailing 사이 간격 주기 */
+.mailing:first-child {
+  margin-right: 4%;
+}
+.mailing-title {
+  margin: 0 0 20px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.mailing-title > a,
+.mailing-desc > a {
+  color: #20aa76;
+}
+.mailing-title > a:hover {
+  color: #25c488;
+}
+.mailing-desc {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.3;
+}
+.mailing-form {
+  margin: 10px 0 30px;
+  position: relative;
+}
+.mailing-form > label {
+  /* display: none; */
+  /* visibility: hidden; */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  margin: -1px;
+  /* margin: -1px; form 영역 밖으로 벗어남 */
+  clip: rect(0, 0, 0, 0);
+  /* clip: rect(0, 0, 0, 0); 상하좌우가 잘림 */
+  /* 크기보다 크면 숨겨짐 */
+  /* 보이지 않지만 스크린 리더는 인식할 수 있음 */
+}
+input[type="email"] {
+  width: 100%;
+  border: 1px solid #cfe3dc;
+  border-radius: 4px;
+  height: 5rem;
+  /* 입력 값이 submit버튼을 가리지 않도록 padding 값 부여 */
+  padding: 6px 80px 8px 10px;
+}
+/* 버튼이 .mailing-form안에 위치하도록 세팅 */
+.mailing-form-btn {
+  position: absolute;
+  top: 30%;
+  right: 10px;
+  /* 테두리 삭제, 배경 지우기 */
+  border: 0;
+  background: transparent;
+  color: #44b78b;
+  /* submit 버트 위에 마우스 올리면 손가락으로 변경 */
+  cursor: pointer;
+}
+/* submit 버트 위에 마우스 올리면 색 변경 */
+.mailing-form-btn:hover {
+  color: #0c4b33;
+}
+
+/* -------------------------------------------------------------------- */
+.side-content {
+  float: right; /* 오른쪽에 어울림으로 위치 
+  float 속성을 쓰면 부모 속성이 자식 속성의 크기를 알지 못함 */
+  width: 30%; /* 오른쪽에 어울림으로 위치할 때 차지하는 비율 */
+  margin: 0;
+  padding: 0 0 30px 20px;
+  border-left: 1px solid #cfe3dc;
+}
+.side-content a:hover {
+  color: #25c488;
+}
+.container-side-cta {
+  text-align: center;
+}
+.side-cta {
+  width: 330px;
+  padding: 16px 24px;
+  margin: 40px auto 0;
+}
+.side-cta em {
+  font-style: normal;
+  color: #c9f0dd;
+}
+/* 아래는 구체성 점수를 높이기 위해 두 가지 클래스 이름을
+적용토록 구성한 것이다.
+클래스 이름에 "cta","side-cta"가 모두 속하는 것을 찾으라는 의미  
+.cta .side-cta로 작성하면 cta 클래스 아래 side-cta를 찾으라는 의미*/
+.cta.side-cta:hover {
+  color: white;
+}
+.more {
+  display: block;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #20aa76;
+}
+/* 가상 요소, 플로트를 해제할 때와 동일하게 after를 적용 */
+.more::after {
+  content: " >";
+}
+.infos {
+  margin-bottom: 40px;
+}
+.infos-title {
+  font-size: 1.8rem;
+  font-weight: 400;
+  border-bottom: 1px solid #cfe3dc;
+  margin: 3.5rem 0 0 0;
+  padding-bottom: 1rem;
+}
+.news-article {
+  padding: 20px 0;
+}
+.news-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+.news-title > a,
+.community-title > a {
+  color: #20aa76;
+}
+.news-desc {
+  font-size: 1.5rem;
+}
+.news-meta {
+  margin: 0;
+  margin-top: 1rem;
+  font-size: 1.4rem;
+  color: #859d94;
+}
+.news-meta > span {
+  font-weight: 700;
+}
+.list-communities {
+  padding: 20px 0;
+  margin: 0;
+}
+.community-title {
+  font-size: 1.4rem;
+}
+/* 나중에 추가되는 것 고려+두번째꺼에만 마진 추가 */
+.community-title:nth-child(n + 2) {
+  margin-top: 14px;
+}
+.community-desc {
+  margin: 10px 0 0 0;
+  font-size: 1.4rem;
+  color: #859d94;
+}
+
+/* ----------------------------------------------------------------------------------- */
+
+/* content-info */
+.content-info {
+  background: green;
+}
+.links {
+  background: lightgreen;
+}
+.footer {
+  background: purple;
+  clear: both;
+  /* 플로트 속성을 적용받아 크기가 인지되지 않는 부분으로부터 영향을 받지 않기 위함 */
+}
